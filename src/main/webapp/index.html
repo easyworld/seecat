@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Index</title>
+</head>
+<body>
+	<h1>正在运行的tomcat端口信息汇总</h1>
+	<table>
+		<thead>
+			<tr>
+				<th>tomcat路径</th>
+				<th>shutdown_port</th>
+				<th>http_port</th>
+				<th>http_redirect_port</th>
+				<th>ajp_port</th>
+				<th>ajp_redirect_port</th>
+				<th>runjdwp_address</th>
+				<th>jmxremote_port</th>
+			</tr>
+		</thead>
+		<tbody id="tbody">
+
+		</tbody>
+	</table>
+	<h1>已用端口列表</h1>
+	<div id="list"></div>
+</body>
+<script src="./static/js/jquery.min.js"></script>
+<script language="javascript" type="text/javascript">
+	$.get("./getRunningTomcat.htm", function(msg) {
+		var data = JSON.parse(msg);
+		var list = new Array();
+		for ( var str in data) {
+			var tr = $("<tr>");
+			tr.append("<td>" + str + "</td>");
+			tr.append("<td>" + data[str].server.shutdown_port + "</td>");
+			list.push(data[str].server.shutdown_port);
+			tr.append("<td>" + data[str].server.http_port + "</td>");
+			list.push(data[str].server.http_port);
+			tr.append("<td>" + data[str].server.http_redirect_port + "</td>");
+			list.push(data[str].server.http_redirect_port);
+			tr.append("<td>" + data[str].server.ajp_port + "</td>");
+			list.push(data[str].server.ajp_port);
+			tr.append("<td>" + data[str].server.ajp_redirect_port + "</td>");
+			list.push(data[str].server.ajp_redirect_port);
+			tr.append("<td>" + data[str].env.runjdwp_address + "</td>");
+			list.push(data[str].env.runjdwp_address);
+			tr.append("<td>" + data[str].env.jmxremote_port + "</td>");
+			list.push(data[str].env.jmxremote_port);
+			$("#tbody").append(tr);
+		}
+		list.sort(function(a, b) {
+			return a - b
+		});
+		for (var i = 0; i < list.length; i++) {
+			$("#list").append(list[i] + "<br>");
+		}
+	});
+</script>
+</html>

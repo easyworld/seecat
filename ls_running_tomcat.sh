@@ -1,0 +1,1 @@
+ps -ef | grep -v grep | grep java | awk '/\/srv\// {print $9}' | awk -F '/' '{printf("/%s/%s\n",$2,$3)}'
